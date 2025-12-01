@@ -142,3 +142,33 @@ footer {
   padding: 20px;
   color: #666;
 }
+
+.participants-section {
+  margin-top: 12px;
+  padding: 10px;
+  background-color: #eef3fb;
+  border-radius: 4px;
+  border: 1px solid #dde6f7;
+}
+
+.participants-section h5 {
+  margin-bottom: 6px;
+  color: #3949ab;
+  font-size: 15px;
+}
+
+.participants-list {
+  list-style-type: disc;
+  margin-left: 20px;
+  color: #333;
+  font-size: 15px;
+  padding-left: 0;
+}
+
+.participants-list li {
+  margin-bottom: 2px;
+  word-break: break-all;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  color: #1a237e;
+}
