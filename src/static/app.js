@@ -42,7 +42,33 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       activity.participants.forEach((email) => {
         const li = document.createElement("li");
-        li.textContent = email;
+        const span = document.createElement("span");
+        span.textContent = email;
+        li.appendChild(span);
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "delete-participant-btn";
+        deleteBtn.title = "Удалить участника";
+        deleteBtn.innerHTML = "&#128465;";
+        deleteBtn.onclick = async (e) => {
+          e.stopPropagation();
+          if (confirm(`Удалить участника ${email}?`)) {
+            try {
+              const response = await fetch(`/activities/${encodeURIComponent(name)}/participants/${encodeURIComponent(email)}`, {
+                method: "DELETE",
+              });
+              const result = await response.json();
+              if (response.ok) {
+                fetchActivities();
+              } else {
+                alert(result.detail || "Ошибка при удалении участника");
+              }
+            } catch (error) {
+              alert("Ошибка при удалении участника");
+            }
+          }
+        };
+        li.appendChild(deleteBtn);
         participantsList.appendChild(li);
       });
     }
@@ -61,11 +87,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Clear loading message
       activitiesList.innerHTML = "";
+      // Clear activity select options except the first
+      while (activitySelect.options.length > 1) {
+        activitySelect.remove(1);
+      }
 
       // Populate activities list
       Object.entries(activities).forEach(([name, details]) => {
         const activityCard = createActivityCard(name, details);
-
         activitiesList.appendChild(activityCard);
 
         // Add option to select dropdown
@@ -101,6 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.textContent = result.message;
         messageDiv.className = "success";
         signupForm.reset();
+        fetchActivities(); 
       } else {
         messageDiv.textContent = result.detail || "An error occurred";
         messageDiv.className = "error";
